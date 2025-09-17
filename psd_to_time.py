@@ -4,6 +4,7 @@
 # In[1]:
 
 
+from random import random
 import scipy as sp
 import scipy.interpolate
 from scipy.fft import fft, ifft
@@ -68,22 +69,54 @@ plt.show()
 
 
 plt.loglog(points,nums)
+plt.title('Interppolated PSD')
 plt.show()
 
 
 # In[8]:
+yuck = np.zeros(10000)
+duh = np.ones(10000)
+for j in range(1,len(yuck)):
+  yuck[j] = np.random.normal(0.0,1.0)
+  duh[j] = duh[j] * np.sin(2*3.14159265*100*j/1000)
+  yuck[j] = yuck[j] + duh[j]
 
+halfRange = len(nums)
+print(halfRange)
+for j in range(1,halfRange):
+  print(halfRange-j+1)
+  temp = nums[halfRange-j]
+  nums.append(temp)
 
-gfg_inversed = ifft(nums)
-
-
-# In[9]:
-
-
-plt.plot(abs(gfg_inversed))
+dummy = fft(yuck)
+plt.plot(yuck)
+plt.title('Time Series')
+plt.show()
+#plt.semilogy(abs(dummy[0:len(dummy)//2]))
+plt.semilogy(abs(dummy))
+plt.title('FFT')
 plt.show()
 
+gfg_inversed = ifft(nums)
+#gfg_inversed = ifft(dummy)
 
+# In[9]:
+plt.semilogy(nums)
+plt.show()
+
+plt.plot(abs(gfg_inversed))
+plt.title('Time Series from PSD')
+plt.show()
+
+print('Length of IFFT result =',len(gfg_inversed))
+print('Nums[0] = ',nums[0])
+print('Nums[end] = ',nums[len(points)])
+print('Nums[-1] = ',nums[-1])
+
+print('Length of IFFT result =',len(dummy))
+print('Nums[0] = ',dummy[0])
+print('Nums[end] = ',dummy[len(dummy)//2])
+print('Nums[-1] = ',dummy[-1])
 # In[ ]:
 
 
