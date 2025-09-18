@@ -25,8 +25,8 @@ def log_interp(zz,xx,yy,):
 # In[3]:
 
 
-freq = [20,80,350,2000]
-amp = [0.01,0.04,0.04,0.007042]
+freq = [20,80,150,200,350,2000]
+amp = [0.01,0.04,0.001,0.001,0.04,0.007042]
 
 
 # In[4]:
@@ -84,11 +84,17 @@ for j in range(1,len(yuck)):
 halfRange = len(nums)
 print(halfRange)
 for j in range(1,halfRange):
-  print(halfRange-j+1)
+  #print(halfRange-j+1)
   temp = nums[halfRange-j]
   nums.append(temp)
 
+complexNums = []
+for j in range(0,len(nums)):
+  randomPhase = 2*np.pi*np.random.uniform(0,1)
+  complexNums.append(complex(nums[j]*np.sin(randomPhase),nums[j]*np.cos(randomPhase)))
+
 dummy = fft(yuck)
+print("Class of fft variable is",type(dummy))
 plt.plot(yuck)
 plt.title('Time Series')
 plt.show()
@@ -97,9 +103,10 @@ plt.semilogy(abs(dummy))
 plt.title('FFT')
 plt.show()
 
-gfg_inversed = ifft(nums)
+gfg_inversed = ifft(complexNums)
 #gfg_inversed = ifft(dummy)
-
+print("Length of inversed fft =",len(gfg_inversed))
+print("Length of frequency vector is",len(points))
 # In[9]:
 plt.semilogy(nums)
 plt.show()
@@ -109,14 +116,15 @@ plt.title('Time Series from PSD')
 plt.show()
 
 print('Length of IFFT result =',len(gfg_inversed))
-print('Nums[0] = ',nums[0])
-print('Nums[end] = ',nums[len(points)])
-print('Nums[-1] = ',nums[-1])
 
-print('Length of IFFT result =',len(dummy))
-print('Nums[0] = ',dummy[0])
-print('Nums[end] = ',dummy[len(dummy)//2])
-print('Nums[-1] = ',dummy[-1])
+dummy = fft(gfg_inversed)
+
+#plt.semilogy(abs(dummy[0:len(dummy)//2]))
+plt.loglog(abs(dummy[0:len(dummy)//2]))
+plt.loglog(freq,amp)
+plt.title('FFT of inverted time series')
+plt.show()
+
 # In[ ]:
 
 
